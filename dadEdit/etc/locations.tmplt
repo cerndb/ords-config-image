@@ -1,0 +1,9 @@
+{% for dad in listOfDads %}
+{% if dad[2] != None %}
+<Location {{ service['context_root'] }}/{{ dad['name'] }}>
+    Order Deny,Allow
+    Deny from all
+    {{ dad['type'] }}
+</Location>
+{% endif %}
+{% endfor %}

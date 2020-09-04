@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Copyright 2020 CERN
+
+   This software is distributed under the terms of the GNU General Public
+   Licence version 3 (GPL Version 3), copied verbatim in the file "COPYING". In
+   applying this licence, CERN does not waive the privileges and immunities
+   granted to it by virtue of its status as an Intergovernmental Organization or
+   submit itself to any jurisdiction.
+-->
+<web-app id="WebApp_ID" version="2.4"
+	xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+	<display-name>Oracle REST Data Services</display-name>
+	<request-character-encoding>UTF-8</request-character-encoding>
+	<context-param>
+		<param-name>config.dir</param-name>
+		<!-- Enter the location where configuration settings should be stored -->
+		<param-value>CONFIGDIR</param-value>
+	</context-param>
+	<context-param>
+		<param-name>version</param-name>
+		<param-value>19.4.0.r3521226</param-value>
+	</context-param>
+	
+	<listener>
+		<listener-class>oracle.dbtools.entrypoint.WebApplicationEntryPoint</listener-class>
+	</listener>
+
+	<servlet>
+		<description>
+		</description>
+		<display-name>HttpEndPoint</display-name>
+		<servlet-name>HttpEndPoint</servlet-name>
+		<servlet-class>oracle.dbtools.entrypoint.WebApplicationRequestEntryPoint</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>HttpEndPoint</servlet-name>
+		<url-pattern>/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<description>
+		</description>
+		<display-name>Forbidden</display-name>
+		<servlet-name>Forbidden</servlet-name>
+		<servlet-class>oracle.dbtools.entrypoint.Forbidden</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Forbidden</servlet-name>
+		<url-pattern>/oracle/dbtools/jarcl</url-pattern>
+	</servlet-mapping>
+
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.htm</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>default.html</welcome-file>
+		<welcome-file>default.htm</welcome-file>
+		<welcome-file>default.jsp</welcome-file>
+	</welcome-file-list>
+
+</web-app>

@@ -1,0 +1,7 @@
+[cci7-openstack-clients]
+name=CERN rebuilds for OpenStack clients
+baseurl=http://linuxsoft.cern.ch/internal/repos/openstackclients7-train-stable/x86_64/os/
+enabled=1
+gpgcheck=0
+includepkgs=argo,helm,kubernetes-client,python-keystoneclient-kerberos,python-keystoneclient-x509
+priority=5

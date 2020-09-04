@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+   Copyright 2020 CERN
+
+   This software is distributed under the terms of the GNU General Public
+   Licence version 3 (GPL Version 3), copied verbatim in the file "COPYING". In
+   applying this licence, CERN does not waive the privileges and immunities
+   granted to it by virtue of its status as an Intergovernmental Organization or
+   submit itself to any jurisdiction.
+-->
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+{%- set defaults = { 
+    'cache.caching': 'false',
+    'cache.directory': '/tmp/apex/cache',
+    'cache.duration': 'days',
+    'cache.expiration': 7,
+    'cache.maxEntries': 500,
+    'cache.monitorInterval': 60,
+    'cache.type': 'lru',
+    'debug.debugger': 'false',
+    'debug.printDebugToScreen': 'false',
+    'error.keepErrorMessages': 'true',
+    'error.maxEntries': 50,
+    'jdbc.InactivityTimeout': 1800,
+    'jdbc.InitialLimit': 5,
+    'jdbc.MaxConnectionReuseCount': 1000,
+    'jdbc.MaxLimit': 20,
+    'jdbc.MaxStatementsLimit': 10,
+    'jdbc.MinLimit': 1,
+    'jdbc.statementTimeout': 900,
+    'log.logging': 'false',
+    'log.maxEntries': 50,
+    'misc.defaultPage': 'apex',
+    'security.disableDefaultExclusionList': 'false',
+    'security.maxEntries': 2000,
+    'security.requestValidationFunction': 'wwv_flow_epg_include_modules.authorize',
+    'security.validationFunctionType': 'plsql',
+    'db.invalidPoolTimeout': '15m'
+    }
+     %}
+{%- set tmp = defaults.update(final_parameters) -%}
+{%- for parameter in defaults %}
+<entry key="{{ parameter }}">{{ defaults[parameter] }}</entry>
+{%- endfor %}
+
+</properties>

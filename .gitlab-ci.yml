@@ -1,0 +1,84 @@
+#  Copyright 2020 CERN
+# This software is distributed under the terms of the GNU General Public Licence
+# version 3 (GPL Version 3), copied verbatim in the file "COPYING". In applying
+# this licence, CERN does not waive the privileges and immunities granted to it
+# by virtue of its status as an Intergovernmental Organization or submit itself
+# to any jurisdiction.
+
+
+stages:
+  - test
+  - push
+  
+check_output:
+  variables:
+    MOUNT_POINT: /ORA/dbs01/syscontrol/local/dadEdit
+    ARTIFACTS_DIR:  /ORA/dbs01/syscontrol/local/dadEdit
+  image: docker:18.09
+  tags:
+    - db-runner-docker-privilege
+  before_script:
+    - docker info
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+  stage: test
+  script:
+    - docker pull ${CI_REGISTRY_IMAGE}:latest || true
+    - docker build --cache-from ${CI_REGISTRY_IMAGE}:latest -t test-image .
+    - mkdir -p $ARTIFACTS_DIR
+    - docker run --name test-image -e SERVICE_NAME=GITLAB_CI_K8S -e TBAG_ACCOUNT_PASS="${DBJEEDY_PWD}" test-image 
+    - docker cp test-image:"${MOUNT_POINT}"/. "${ARTIFACTS_DIR}"
+    - echo "Starting tests"
+    - diff -w "${ARTIFACTS_DIR}"/wars/conf/htmldb_gitlabci_pu.xml tests/artifacts/htmldb_gitlabci_pu.xml 
+    - diff -w "${ARTIFACTS_DIR}"/wars/conf/htmldb_gitlabci_al.xml tests/artifacts/htmldb_gitlabci_al.xml 
+    - diff -w "${ARTIFACTS_DIR}"/wars/conf/htmldb_gitlabci_rt.xml tests/artifacts/htmldb_gitlabci_rt.xml 
+    - diff -w "${ARTIFACTS_DIR}"/wars/conf/htmldb_gitlabci.xml tests/artifacts/htmldb_gitlabci.xml 
+    - diff -w "${ARTIFACTS_DIR}"/wars/defaults.xml tests/artifacts/defaults.xml
+    - diff -w "${ARTIFACTS_DIR}"/wars/url-mapping.xml tests/artifacts/url-mapping.xml 
+    - mkdir ords && unzip -qq -d ords "${ARTIFACTS_DIR}"/wars/ords.war && diff -w ords/WEB-INF/web.xml tests/artifacts/web.xml 
+    - echo "Tests succeeded"
+  services:
+    - name: docker:18.09-dind
+      alias: localhost 
+  
+
+# Build development image when user pushes to a topic branch
+build_dev:
+  stage: push
+  except:
+    - master
+  only:
+    # To avoid this job to be triggered when we push a tag
+    - branches
+  tags:
+    - docker-image-build
+  script: "echo 'Building Docker image...'" 
+  variables:
+    # Tag the image with the name of the branch where user has pushed
+    TO: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+    BUILD_ARG_1: TARGET_IMAGE_TAG=${CI_COMMIT_REF_NAME}
+
+# Build latest image when user pushes to master or branch
+build_latest:
+  stage: push
+  only:
+    - branches
+  tags:
+    - docker-image-build
+  script: "echo 'Building Docker image...'" 
+  variables:
+    # Tag the image with the name of the branch where user has pushed
+    TO: $CI_REGISTRY_IMAGE:latest
+    BUILD_ARG_1: TARGET_IMAGE_TAG="latest"
+
+# Build latest image when user pushes to master
+build_tag:
+  stage: push
+  only:
+    - tags
+  tags:
+    - docker-image-build
+  script: "echo 'Building Docker image...'" 
+  variables:
+    # Tag the image with the name of the branch where user has pushed
+    TO: $CI_REGISTRY_IMAGE:$CI_COMMIT_TAG
+    BUILD_ARG_1: TARGET_IMAGE_TAG=${CI_COMMIT_TAG}

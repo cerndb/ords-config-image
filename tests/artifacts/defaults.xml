@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+   Copyright 2020 CERN
+
+   This software is distributed under the terms of the GNU General Public
+   Licence version 3 (GPL Version 3), copied verbatim in the file "COPYING". In
+   applying this licence, CERN does not waive the privileges and immunities
+   granted to it by virtue of its status as an Intergovernmental Organization or
+   submit itself to any jurisdiction.
+-->
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<entry key="cache.caching">true</entry>
+<entry key="cache.directory">/cache/dir</entry>
+<entry key="cache.duration">hours</entry>
+<entry key="cache.expiration">2</entry>
+<entry key="cache.maxEntries">500</entry>
+<entry key="cache.monitorInterval">60</entry>
+<entry key="cache.type">lru</entry>
+<entry key="debug.debugger">true</entry>
+<entry key="debug.printDebugToScreen">true</entry>
+<entry key="error.keepErrorMessages">true</entry>
+<entry key="error.maxEntries">50</entry>
+<entry key="jdbc.InactivityTimeout">1800</entry>
+<entry key="jdbc.InitialLimit">5</entry>
+<entry key="jdbc.MaxConnectionReuseCount">1000</entry>
+<entry key="jdbc.MaxLimit">22</entry>
+<entry key="jdbc.MaxStatementsLimit">10</entry>
+<entry key="jdbc.MinLimit">1</entry>
+<entry key="jdbc.statementTimeout">900</entry>
+<entry key="log.logging">true</entry>
+<entry key="log.maxEntries">50</entry>
+<entry key="misc.defaultPage">default.procedure</entry>
+<entry key="security.disableDefaultExclusionList">false</entry>
+<entry key="security.maxEntries">2000</entry>
+<entry key="db.invalidPoolTimeout">15m</entry>
+</properties>

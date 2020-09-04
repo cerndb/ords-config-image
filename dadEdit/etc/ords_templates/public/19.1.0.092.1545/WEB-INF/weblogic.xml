@@ -1,0 +1,298 @@
+<!--
+   Copyright 2020 CERN
+
+   This software is distributed under the terms of the GNU General Public
+   Licence version 3 (GPL Version 3), copied verbatim in the file "COPYING". In
+   applying this licence, CERN does not waive the privileges and immunities
+   granted to it by virtue of its status as an Intergovernmental Organization or
+   submit itself to any jurisdiction.
+-->
+<weblogic-web-app xmlns="http://www.bea.com/ns/weblogic/weblogic-web-app">
+
+	<context-root>CONTEXTROOT</context-root>
+	<session-descriptor>
+		<persistent-store-type>replicated_if_clustered</persistent-store-type>
+	</session-descriptor>
+
+	<container-descriptor>
+		<!-- 
+  		<prefer-web-inf-classes>true</prefer-web-inf-classes>
+		-->
+		<prefer-web-inf-classes>false</prefer-web-inf-classes>
+		<!-- Use the Weblogic classpath analysis tool (CAT) to specify the prefer-application-packages -->
+		<!-- start weblogic and navigate to weblogic:port/wls-cat , analyze conflicts of the ords.war -->
+		<!-- We use prefer-application-packages from ords.war because we are unable to "block" -->
+		<!-- service loader from finding services in the classpath using prefer-web-inf-classes-->
+		<!-- below you will find <prefer-application-resources>which block service loader from loading weblogic jersey services -->
+		<!-- the downside of this is we have to specify all packages in ords.war which conflict with weblogic classpath -->
+		<!-- Weblogic standard and Weblogic Infrastructure have different classpaths which requires some extra packages to be prefered -->
+		<prefer-application-packages>
+		    <!-- the following was specified by the weblogic cat -->
+			<package-name>CertificateTest</package-name>
+			<package-name>KeyStoreTest</package-name>
+			<package-name>oracle.jdbc.*</package-name>
+			<package-name>org.glassfish.jersey.*</package-name>
+			<package-name>javax.xml.bind.*</package-name>
+			<package-name>com.fasterxml.jackson.*</package-name>
+			<package-name>com.google.common.*</package-name>
+			<package-name>com.google.thirdparty.*</package-name>
+			<package-name>com.sun.activation.*</package-name>
+			<package-name>com.sun.istack.*</package-name>
+			<package-name>com.sun.research.*</package-name>
+			<package-name>com.sun.xml.*</package-name>
+			<package-name>javassist.*</package-name>
+			<package-name>javassist.bytecode.*</package-name>
+			<package-name>javassist.bytecode.analysis.*</package-name>
+			<package-name>javassist.bytecode.annotation.*</package-name>
+			<package-name>javassist.bytecode.stackmap.*</package-name>
+			<package-name>javassist.compiler.*</package-name>
+			<package-name>javassist.compiler.ast.*</package-name>
+			<package-name>javassist.convert.*</package-name>
+			<package-name>javassist.expr.*</package-name>
+			<package-name>javassist.runtime.*</package-name>
+			<package-name>javassist.scopedpool.*</package-name>
+			<package-name>javassist.tools.*</package-name>
+			<package-name>javassist.tools.reflect.*</package-name>
+			<package-name>javassist.tools.rmi.*</package-name>
+			<package-name>javassist.tools.web.*</package-name>
+			<package-name>javassist.util.*</package-name>
+			<package-name>javassist.util.proxy.*</package-name>
+			<package-name>javax.activation.*</package-name>
+			<package-name>javax.annotation.*</package-name>
+			<package-name>javax.annotation.security.*</package-name>
+			<package-name>javax.annotation.sql.*</package-name>
+			<package-name>javax.inject.*</package-name>
+			<package-name>javax.json.*</package-name>
+			<package-name>javax.json.spi.*</package-name>
+			<package-name>javax.json.stream.*</package-name>
+			<!-- WebApplicationEntryPoint implements javax.servlet.ServletContextListener -->
+			<!-- Which is used by Weblogic, so cannot use ords.war version used by Jetty -->
+			<!--<package-name>javax.servlet.*</package-name> -->
+			<!--<package-name>javax.servlet.annotation.*</package-name> -->
+			<!--<package-name>javax.servlet.descriptor.*</package-name> -->
+			<!--<package-name>javax.servlet.http.*</package-name> -->
+			<package-name>javax.validation.*</package-name>
+			<package-name>javax.validation.bootstrap.*</package-name>
+			<package-name>javax.validation.constraints.*</package-name>
+			<package-name>javax.validation.constraintvalidation.*</package-name>
+			<package-name>javax.validation.executable.*</package-name>
+			<package-name>javax.validation.groups.*</package-name>
+			<package-name>javax.validation.metadata.*</package-name>
+			<package-name>javax.validation.spi.*</package-name>
+			<package-name>javax.ws.rs.*</package-name>
+			<package-name>jersey.repackaged.org.*</package-name>
+			<package-name>oracle.as.management.*</package-name>
+			<package-name>oracle.core.lmx.*</package-name>
+			<package-name>oracle.core.lvf.*</package-name>
+			<package-name>oracle.gss.util.*</package-name>
+			<package-name>oracle.i18n.text.*</package-name>
+			<package-name>oracle.i18n.util.*</package-name>
+			<package-name>oracle.jpub.runtime.*</package-name>
+			<package-name>oracle.net.ano.*</package-name>
+			<package-name>oracle.net.aso.*</package-name>
+			<package-name>oracle.net.jdbc.*</package-name>
+			<package-name>oracle.net.jndi.*</package-name>
+			<package-name>oracle.net.ns.*</package-name>
+			<package-name>oracle.net.nt.*</package-name>
+			<package-name>oracle.net.resolver.*</package-name>
+			<package-name>oracle.ons.*</package-name>
+			<package-name>oracle.ons.rpc.*</package-name>
+			<package-name>oracle.ons.spi.*</package-name>
+			<package-name>oracle.security.crypto.*</package-name>
+			<package-name>oracle.security.o3logon.*</package-name>
+			<package-name>oracle.security.o5logon.*</package-name>
+			<package-name>oracle.security.pki.*</package-name>
+			<package-name>oracle.sql.*</package-name>
+			<package-name>oracle.sql.converter.*</package-name>
+			<package-name>oracle.ucp.*</package-name>
+			<package-name>oracle.ucp.admin.*</package-name>
+			<package-name>oracle.ucp.common.*</package-name>
+			<package-name>oracle.ucp.jdbc.*</package-name>
+			<package-name>oracle.ucp.logging.*</package-name>
+			<package-name>oracle.ucp.util.*</package-name>
+			<package-name>oracle.ucp.xml.*</package-name>
+			<package-name>oracle.xdb.*</package-name>
+			<package-name>oracle.xdb.bean.*</package-name>
+			<package-name>oracle.xdb.dom.*</package-name>
+			<package-name>oracle.xdb.event.*</package-name>
+			<package-name>oracle.xdb.servlet.*</package-name>
+			<package-name>oracle.xdb.spi.*</package-name>
+			<package-name>oracle.xml.async.*</package-name>
+			<package-name>oracle.xml.binxml.*</package-name>
+			<package-name>oracle.xml.comp.*</package-name>
+			<package-name>oracle.xml.fdom.*</package-name>
+			<package-name>oracle.xml.fisupport.*</package-name>
+			<package-name>oracle.xml.jaxp.*</package-name>
+			<package-name>oracle.xml.jdwp.*</package-name>
+			<package-name>oracle.xml.mesg.*</package-name>
+			<package-name>oracle.xml.parser.*</package-name>
+			<package-name>oracle.xml.scalable.*</package-name>
+			<package-name>oracle.xml.util.*</package-name>
+			<package-name>oracle.xml.xpath.*</package-name>
+			<package-name>oracle.xml.xqxp.*</package-name>
+			<package-name>oracle.xml.xslt.*</package-name>
+			<package-name>oracle.xml.xti.*</package-name>
+			<package-name>org.aopalliance.aop.*</package-name>
+			<package-name>org.aopalliance.instrument.*</package-name>
+			<package-name>org.aopalliance.intercept.*</package-name>
+			<package-name>org.aopalliance.reflect.*</package-name>
+			<package-name>org.apache.commons.*</package-name>
+			<package-name>org.glassfish.hk2.*</package-name>
+			<package-name>org.glassfish.json.*</package-name>
+			<package-name>org.jvnet.fastinfoset.*</package-name>
+			<package-name>org.jvnet.hk2.*</package-name>
+			<package-name>org.jvnet.staxex.*</package-name>
+			<package-name>org.jvnet.tiger_types.*</package-name>
+			<!-- Cannot add org.w3c.dom.* as it is a split package. -->
+			<!-- The package shipped with ords does not have all classes weblogic requires -->
+			<!-- java.lang.ClassNotFoundException: org.w3c.dom.Node -->
+			<!-- Specifying the exact classes with conflicts -->
+			<!-- Note Weblogic CAT still sees these classes as conflicts. But testing proves these classes are loaded from ords.war -->
+			<package-name>org.w3c.dom.ElementTraversal</package-name>
+			<package-name>org.w3c.dom.validation.CharacterDataEditVAL</package-name>
+			<package-name>org.w3c.dom.validation.DocumentEditVAL</package-name>
+			<package-name>org.w3c.dom.validation.ElementEditVAL</package-name>
+			<package-name>org.w3c.dom.validation.ExceptionVAL</package-name>
+			<package-name>org.w3c.dom.validation.NodeEditVAL</package-name>
+			<!-- The following packages are conflicts in Infrastructure Weblogic -->
+			<package-name>oracle.security.misc.*</package-name>
+		</prefer-application-packages>
+
+		<prefer-application-resources>
+			<!-- Cannot add org.w3c.dom.* as it is a split package. -->
+			<!-- <resource-name>org.w3c.dom.*</resource-name>-->
+			 <!-- the following was specified by the weblogic cat -->
+			<resource-name>oracle.jdbc.*</resource-name>
+			<resource-name>org.glassfish.jersey.*</resource-name>
+			<resource-name>javax.xml.bind.*</resource-name>
+			<resource-name>com.fasterxml.jackson.*</resource-name>
+			<resource-name>com.google.common.*</resource-name>
+			<resource-name>com.google.thirdparty.*</resource-name>
+			<resource-name>com.sun.activation.*</resource-name>
+			<resource-name>com.sun.istack.*</resource-name>
+			<resource-name>com.sun.research.*</resource-name>
+			<resource-name>com.sun.xml.*</resource-name>
+			<resource-name>javassist.*</resource-name>
+			<resource-name>javassist.bytecode.*</resource-name>
+			<resource-name>javassist.bytecode.analysis.*</resource-name>
+			<resource-name>javassist.bytecode.annotation.*</resource-name>
+			<resource-name>javassist.bytecode.stackmap.*</resource-name>
+			<resource-name>javassist.compiler.*</resource-name>
+			<resource-name>javassist.compiler.ast.*</resource-name>
+			<resource-name>javassist.convert.*</resource-name>
+			<resource-name>javassist.expr.*</resource-name>
+			<resource-name>javassist.runtime.*</resource-name>
+			<resource-name>javassist.scopedpool.*</resource-name>
+			<resource-name>javassist.tools.*</resource-name>
+			<resource-name>javassist.tools.reflect.*</resource-name>
+			<resource-name>javassist.tools.rmi.*</resource-name>
+			<resource-name>javassist.tools.web.*</resource-name>
+			<resource-name>javassist.util.*</resource-name>
+			<resource-name>javassist.util.proxy.*</resource-name>
+			<resource-name>javax.activation.*</resource-name>
+			<resource-name>javax.annotation.*</resource-name>
+			<resource-name>javax.annotation.security.*</resource-name>
+			<resource-name>javax.annotation.sql.*</resource-name>
+			<resource-name>javax.inject.*</resource-name>
+			<resource-name>javax.json.*</resource-name>
+			<resource-name>javax.json.spi.*</resource-name>
+			<resource-name>javax.json.stream.*</resource-name>
+			<!-- WebApplicationEntryPoint implements javax.servlet.ServletContextListener -->
+			<!-- Which is used by weblogic, so cannot use ords.war version used by Jetty -->
+			<!--<resource-name>javax.servlet.*</resource-name> -->
+			<!--<resource-name>javax.servlet.annotation.*</resource-name> -->
+			<!--<resource-name>javax.servlet.descriptor.*</resource-name> -->
+			<!--<resource-name>javax.servlet.http.*</resource-name> -->
+			<resource-name>javax.validation.*</resource-name>
+			<resource-name>javax.validation.bootstrap.*</resource-name>
+			<resource-name>javax.validation.constraints.*</resource-name>
+			<resource-name>javax.validation.constraintvalidation.*</resource-name>
+			<resource-name>javax.validation.executable.*</resource-name>
+			<resource-name>javax.validation.groups.*</resource-name>
+			<resource-name>javax.validation.metadata.*</resource-name>
+			<resource-name>javax.validation.spi.*</resource-name>
+			<resource-name>javax.ws.rs.*</resource-name>
+			<resource-name>jersey.repackaged.org.*</resource-name>
+			<resource-name>oracle.as.management.*</resource-name>
+			<resource-name>oracle.core.lmx.*</resource-name>
+			<resource-name>oracle.core.lvf.*</resource-name>
+			<resource-name>oracle.gss.util.*</resource-name>
+			<resource-name>oracle.i18n.text.*</resource-name>
+			<resource-name>oracle.i18n.util.*</resource-name>
+			<resource-name>oracle.jpub.runtime.*</resource-name>
+			<resource-name>oracle.net.ano.*</resource-name>
+			<resource-name>oracle.net.aso.*</resource-name>
+			<resource-name>oracle.net.jdbc.*</resource-name>
+			<resource-name>oracle.net.jndi.*</resource-name>
+			<resource-name>oracle.net.ns.*</resource-name>
+			<resource-name>oracle.net.nt.*</resource-name>
+			<resource-name>oracle.net.resolver.*</resource-name>
+			<resource-name>oracle.ons.*</resource-name>
+			<resource-name>oracle.ons.rpc.*</resource-name>
+			<resource-name>oracle.ons.spi.*</resource-name>
+			<resource-name>oracle.security.crypto.*</resource-name>
+			<resource-name>oracle.security.o3logon.*</resource-name>
+			<resource-name>oracle.security.o5logon.*</resource-name>
+			<resource-name>oracle.security.pki.*</resource-name>
+			<resource-name>oracle.sql.*</resource-name>
+			<resource-name>oracle.sql.converter.*</resource-name>
+			<resource-name>oracle.ucp.*</resource-name>
+			<resource-name>oracle.ucp.admin.*</resource-name>
+			<resource-name>oracle.ucp.common.*</resource-name>
+			<resource-name>oracle.ucp.jdbc.*</resource-name>
+			<resource-name>oracle.ucp.logging.*</resource-name>
+			<resource-name>oracle.ucp.util.*</resource-name>
+			<resource-name>oracle.ucp.xml.*</resource-name>
+			<resource-name>oracle.xdb.*</resource-name>
+			<resource-name>oracle.xdb.bean.*</resource-name>
+			<resource-name>oracle.xdb.dom.*</resource-name>
+			<resource-name>oracle.xdb.event.*</resource-name>
+			<resource-name>oracle.xdb.servlet.*</resource-name>
+			<resource-name>oracle.xdb.spi.*</resource-name>
+			<resource-name>oracle.xml.async.*</resource-name>
+			<resource-name>oracle.xml.binxml.*</resource-name>
+			<resource-name>oracle.xml.comp.*</resource-name>
+			<resource-name>oracle.xml.fdom.*</resource-name>
+			<resource-name>oracle.xml.fisupport.*</resource-name>
+			<resource-name>oracle.xml.jaxp.*</resource-name>
+			<resource-name>oracle.xml.jdwp.*</resource-name>
+			<resource-name>oracle.xml.mesg.*</resource-name>
+			<resource-name>oracle.xml.parser.*</resource-name>
+			<resource-name>oracle.xml.scalable.*</resource-name>
+			<resource-name>oracle.xml.util.*</resource-name>
+			<resource-name>oracle.xml.xpath.*</resource-name>
+			<resource-name>oracle.xml.xqxp.*</resource-name>
+			<resource-name>oracle.xml.xslt.*</resource-name>
+			<resource-name>oracle.xml.xti.*</resource-name>
+			<resource-name>org.aopalliance.aop.*</resource-name>
+			<resource-name>org.aopalliance.instrument.*</resource-name>
+			<resource-name>org.aopalliance.intercept.*</resource-name>
+			<resource-name>org.aopalliance.reflect.*</resource-name>
+			<resource-name>org.apache.commons.*</resource-name>
+			<resource-name>org.glassfish.hk2.*</resource-name>
+			<resource-name>org.glassfish.json.*</resource-name>
+			<resource-name>org.jvnet.fastinfoset.*</resource-name>
+			<resource-name>org.jvnet.hk2.*</resource-name>
+			<resource-name>org.jvnet.staxex.*</resource-name>
+			<resource-name>org.jvnet.tiger_types.*</resource-name>		
+			<!--Note these services are not specified in ords.war.-->
+			<!--They are found in weblogic/modules/weblogic.jaxrs.integration.jar. -->
+			<!--This disables the weblogic services from loading -->
+		    <resource-name>META-INF/services/org.glassfish.jersey.server.spi.ComponentProvider</resource-name>
+			<resource-name>META-INF/services/org.glassfish.jersey.ext.cdi1x.internal.spi.BeanManagerProvider</resource-name>
+			<resource-name>META-INF/services/org.glassfish.jersey.client.spi.ConnectorProvider</resource-name>
+			<resource-name>META-INF/services/org.glassfish.jersey.internal.spi.ForcedAutoDiscoverable</resource-name>
+			<!-- Make sure to only load the ords.war implementation of JAXBContext -->
+			<resource-name>META-INF/services/javax.xml.bind.JAXBContext</resource-name>
+			<!-- The following resources are conflicts in Infrastructure Weblogic -->
+			<resource-name>oracle.security.misc.*</resource-name>
+			<resource-name>META-INF/services/org.glassfish.jersey.servlet.internal.spi.ServletContainerProvider</resource-name>
+			<resource-name>META-INF/services/org.glassfish.jersey.internal.spi.AutoDiscoverable</resource-name>
+		</prefer-application-resources>
+
+	</container-descriptor>
+	<session-descriptor>
+		<persistent-store-type>replicated_if_clustered</persistent-store-type>
+	</session-descriptor>
+
+</weblogic-web-app>

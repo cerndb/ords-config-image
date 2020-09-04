@@ -1,0 +1,1 @@
+For license reasons, you have to put the ORDS war files here yourself. The naming format should be e.g. ords-19.1.0.092.1545.war

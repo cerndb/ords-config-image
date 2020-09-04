@@ -1,0 +1,6 @@
+[ai7-stable]
+name=AI7 software [stable]
+baseurl=http://linuxsoft.cern.ch/internal/repos/ai7-stable/x86_64/os
+enabled=1
+gpgcheck=0
+priority=30

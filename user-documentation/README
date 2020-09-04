@@ -1,0 +1,51 @@
+Quick Examples:
+
+1. Validating the ORDS schema for cerndb1
+    java -jar /work-dir/artifacts/ords/wars/ords.war validate --database cerndb1
+
+2. Change the default caching configuration to disabled
+    java -jar /work-dir/artifacts/ords/wars/ords.war set-property cache.caching true
+
+3. Create or update an user named ords_admin with role Listener Administrator
+    java -jar /work-dir/artifacts/ords/wars/ords.war user ords_admin "Listener Administrator"
+
+4.  Install or upgrade Oracle REST Data Services schema, proxy user and related database objects.
+    java -jar /work-dir/artifacts/ords/wars/ords.war schema
+
+
+=================================Full Guide=====================================
+Note: It's best to run this Docker image from inside of the CERN network.
+
+    -----ORDS Managment Quickstart-------
+    Here's how to manage ORDS installations in 5 simple steps:
+    1. SSH into dbadm
+        ssh dbadm
+    2. Retrieve the DadEdit3 database password. Copy it.
+        get_passwd password_dadedit3_cerndb1
+    3. From your machine, run the docker container, specifying the service you want to manage (APEX, ORAWEB, ORDS, APEX-SSO, ORAWEB-SSO... - for a full list run the container without specifying the service):
+        docker run --rm -it -e SERVICE_NAME=ORDS gitlab-registry.cern.ch/jeedy/utils/ords-config-image:2.2 /bin/bash
+    4. You will be asked for dadEdit3 database password. Paste the password.
+    5. Et voilà! Now you should be able to interact with ORDS
+
+    ------Interacting with ORDS-----------
+    Location of the ords.war 
+        For convenience the ords.war is linked in /work-dir/artifacts/ords/wars. Its original default location is /ORA/dbs01/syscontrol/local/dadEdit/wars
+    Location of the config files
+        Like the war file, config files are linked in /work-dir/artifacts/ords/ords/<<SERVICE_NAME>>/conf. Orignal location: /ORA/dbs01/syscontrol/local/dadEdit/ords/ords/<<SERVICE_NAME>>/conf
+
+    To display a full list of available commands, go to the directory or folder containing the ords.war file and execute the following command:
+        java -jar /work-dir/artifacts/ords/wars/ords.war help
+    A list of the available commands is displayed. To see instructions on how to use each of these commands, enter help followed by the command name, for example:
+        java -jar /work-dir/artifacts/ords/wars/ords.war help configdir
+
+    Validating the schemas
+        You can test all the schemas quickly by running script:
+            /ORA/dbs01/syscontrol/projects/dadEdit3/bin/test_all_schemas
+        If you run it from a host which doesn't have access to the Technical Network, some of the DADs might appear incorrect in that case. 
+
+    Accessing DAD data 
+        If you want to manually check a single DAD, go to the config files directory and find .xml file that corresponds to the DAD that interests you. 
+        Inside you will find credentials that can be e.g. tested through sqlplus.
+
+For more information see the original repo: https://gitlab.cern.ch/jeedy/utils/ords-config-image
+
