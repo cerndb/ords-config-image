@@ -1,23 +1,10 @@
 # ords-config-image
-This image generates configuration files and war files for Oracle Rest DataServices based on data provided by dadEdit3
-[[_TOC_]]
-## ORDS Managment Quickstart
-Here's how to manage ORDS installations in 5 simple steps:
-1. SSH into dbadm
-```
-ssh dbadm
-```
-2. Retrieve the DadEdit3 database password. Copy it.
-```
-get_passwd password_dadedit3_cerndb1
-```
-3. From your machine, run the docker container, specifying the service you want to manage (APEX, ORAWEB, ORDS, APEX-SSO, ORAWEB-SSO... - for a full list run the container without specifying the service):
-```
- docker run --rm -it -e SERVICE_NAME=ORDS gitlab-registry.cern.ch/jeedy/utils/ords-config-image:2.3 /bin/bash
-```
-4. You will be asked for dadEdit3 database password. Paste the password.
+This image generates configuration files and war files for Oracle Rest DataServices based on data provided by dadEdit3 database.
 
-5. Et voilà! Now you should be able to [interact with ORDS](#interacting-with-ords) and execute the commands from the [examples section](#example-commands). There's also a README in the main directory of the container (`/work-dir/`).
+If you want to run this image outside of CERN, you will notice 3 things missing:
+1) dadEdit3 database (which schema you can find [here](./resources/diagram_of-data-model.png)
+2) Teigi service - which is CERN-internal tool and is used to as a secure password storage
+3) ORDS.war files that you have to download yourself from Oracle, due to licensing issues (see [here](./dadEdit/wars/PUT_SOFTWARE_HERE.txt))
 
 
 ## Detailed How-To
@@ -169,8 +156,6 @@ To generate the config and the war file, run the container with following enviro
     </tr>
 </table>
 
-### Other
-It's best to run this Docker image from inside of the CERN network.
 
 ## Artifacts
 If creating the artifacts succeeded, there should be a directory (in `/ORA/dbs01/syscontrol/local/dadEdit` by default) with 3 key elements:
@@ -206,14 +191,6 @@ java -jar /work-dir/artifacts/ords/wars/ords.war user ords_admin "Listener Admin
 ```
 java -jar /work-dir/artifacts/ords/wars/ords.war schema
 ```
-
-#### Validating the schemas
-You can test all the schemas quickly by running script:
-```
-/ORA/dbs01/syscontrol/projects/dadEdit3/bin/test_all_schemas
-```
-
-__Watch out__ where you launch the script from! If you run it from a host which doesn't have access to the Technical Network, some of the DADs might appear incorrect in that case. 
 
 ## Using this image for retrieving the artifacts
 Specify all the required parameters and the artifacts (WARs, config files) will be generated in `/ORA/dbs01/syscontrol/local/dadEdit` by default, so mount a volume there.
